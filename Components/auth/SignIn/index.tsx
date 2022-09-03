@@ -17,7 +17,7 @@ import { Toaster } from "../../../Services/assets/Toaster";
 import { useUser } from "../../../Context/UserContext";
 
 function SignIn({ ChangeHandler,  setCred }: BodyInterface) {
-    const { bind: userNameBind, value: credential } = UseInput();
+    const { bind: userNameBind, value: username } = UseInput();
     const { bind: passwordBind, value: password } = UseInput();
     // const { dispatcher } = useUser();
     const [{ data, isLoading }, fetch] = UseApi({
@@ -28,7 +28,7 @@ function SignIn({ ChangeHandler,  setCred }: BodyInterface) {
 //             if (data.code) {
 //                 // setCred({
 //                 //     code: data.code,
-//                 //     credential: data.credential,
+//                 //     username: data.username,
 //                 // });
 //                 ChangeHandler("verify");
 //             } else {
@@ -46,43 +46,43 @@ function SignIn({ ChangeHandler,  setCred }: BodyInterface) {
 //     }, [data]);
 
     const IsDisabled = () => {
-        return credential === "" || password === "";
+        return username === "" || password === "";
     };
 
     const Handler = (e: FormEvent) => {
         e.preventDefault();
-        fetch({ credential, password });
+        fetch({ username, password });
     };
 
     return (
         <Stack as="form" onSubmit={Handler}>
             <FormControl>
-                <FormLabel>"email"</FormLabel>
+                <FormLabel>Username</FormLabel>
                 <Input {...userNameBind} type="username" />
             </FormControl>
             <FormControl>
                 <HStack alignItems="flex-start" justifyContent="space-between">
-                    <FormLabel>"password"</FormLabel>
+                    <FormLabel>Password</FormLabel>
                     <Text
-                        onClick={() => ChangeHandler("forgotpass")}
+                        onClick={() => ChangeHandler("ForgotPassword")}
                         textDecor="underline"
                         cursor="pointer"
                     >
-                    "forgotpass"
+                    Forgot Password
                     </Text>
                 </HStack>
                 <Input {...passwordBind} type="password" />
             </FormControl>
             <Button isDisabled={IsDisabled()} type="submit" isLoading={isLoading}>
-            "Login"
+            Login
 			</Button>
             <Divider />
             <Button
                 isDisabled={isLoading}
                 variant="ghost"
-                onClick={() => ChangeHandler("sign-up")}
+                onClick={() => ChangeHandler("SignUp")}
             >
-            "Sign Up"
+            Sign Up
             </Button>
         </Stack>
     );

@@ -8,10 +8,10 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 // import { useUser } from "../../Context/UserContext";
-import ForgotPassword from "../auth/ForgotPassword";
-import SignIn from "../auth/SignIn";
-import SignUp from "../auth/SignUp"
-import VerifyUser from "../auth/VerifyUser"
+import ForgotPassword from "./ForgotPassword";
+import SignIn from "./SignIn";
+import SignUp from "./SignUp"
+import VerifyUser from "./VerifyUser"
 
 interface Auth {
     isOpen: boolean;
@@ -20,16 +20,16 @@ interface Auth {
 
 export type Cred = {
     code: string;
-    credential: string;
+    username: string;
 };
 
-type Which = "SignIn" | "sign-up" | "forgotpass" | "verify";
+type Which = "SignIn" | "SignUp" | "ForgotPassword" | "verify";
 
 export interface BodyInterface {
     ChangeHandler: (selected: Which) => void;
     setCred: ({}: Cred) => void;
     fromLocal?: boolean;
-    _credential?: string;
+    _username?: string;
 }
 
 const AuthBody = (
@@ -43,28 +43,28 @@ const AuthBody = (
     switch (which) {
         case "SignIn":
             return <SignIn {...props} />;
-        case "sign-up":
-        //     return <SignUp {...props} />;
-        // case "forgotpass":
-        //     return <ForgotPassword {...props} />;
+        case "SignUp":
+            return <SignUp {...props} />;
+        case "ForgotPassword":
+            return <ForgotPassword {...props} />;
         case "verify":
-            return <VerifyUser  />;
+            return <VerifyUser />;
     }
 };
 
 function Auth({ isOpen, onClose }: Auth) {
     const [which, setWhich] = useState<Which>("SignIn");
     const [data, setdata] = useState({
-        credential: "",
+        username: "",
         code: "",
     });
     // const {
     //     state: { token },
     // } = useUser();
 
-    const setCred = ({ credential, code }: Cred) => {
+    const setCred = ({ username, code }: Cred) => {
         setdata({
-            credential,
+            username,
             code,
         });
     };

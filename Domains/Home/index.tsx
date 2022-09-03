@@ -5,10 +5,11 @@ import { useUser } from "../../Context/UserContext";
 import { useRouter } from "next/router";
 import { UseAuthContext } from "../../Context/AuthModalContext";
 import { ReactChild } from "react";
+import { Flex } from "@chakra-ui/react";
 
 const noFooter = ["/nfts"];
 
-const Home = ({ Component, pageProps }: AppProps) => {
+const Home = () => {
     const router = useRouter();
     const { isOpen, onClose, onOpen } = UseAuthContext();
     const HH = useBreakpointValue({
