@@ -15,40 +15,8 @@ const Step1 = ({ setValue, setDial }: Step1) => {
     const bg = useColorModeValue("white", "#2d3748");
     return (
         <FormControl>
-            <FormLabel>Email</FormLabel>
-            {/* <PhoneInput
-                masks={{ mn: ".... ...." }}
-                inputStyle={{
-                    backgroundColor: "transparent",
-                    fontSize: "16px",
-                    fontFamily: "Nunito",
-                    width: "100%",
-                    height: "40px",
-                    borderRadius: Borders.md,
-                }}
-                dropdownStyle={{
-                    maxWidth: "272px",
-                    backgroundColor: bg,
-                }}
-                buttonStyle={{
-                    backgroundColor: "transparent",
-                    borderTopLeftRadius: Borders.md,
-                    borderBottomLeftRadius: Borders.md,
-                }}
-                country="mn"
-                onChange={(
-                    phone,
-                    data: {
-                        dialCode: string;
-                    }
-                ) => {
-                    const dialLen = data.dialCode.length;
-                    const myPhone = phone.slice(dialLen);
-                    setDial(data.dialCode);
-                    setValue(myPhone);
-                }}
-            /> */}
-            <Input type="email" onChange={(e) => setValue(e.target.value)} />
+            <FormLabel>Phone Number</FormLabel>
+            <Input type="number" onChange={(e) => setValue(e.target.value)} />
         </FormControl>
     );
 };

@@ -14,12 +14,14 @@ import { useState } from "react";
 import { useColor } from "../../Context/ColorContext";
 
 interface Step2 {
-    bindpassword: Bind;
-    binduserName: Bind;
+    bindPassword: Bind;
+    bindUsername: Bind;
     bindRePassword: Bind;
+    bindEmail: Bind;
     isValid: {
         password: boolean;
         username: boolean;
+        email: boolean;
     };
 }
 
@@ -28,7 +30,6 @@ type Req = {
     uppercase: boolean;
     lowercase: boolean;
     number: boolean;
-    special: boolean;
 };
 
 export const IsDisabled = (isPassValid: Req) => {
@@ -36,8 +37,7 @@ export const IsDisabled = (isPassValid: Req) => {
         isPassValid.length &&
         isPassValid.uppercase &&
         isPassValid.lowercase &&
-        isPassValid.number &&
-        isPassValid.special
+        isPassValid.number 
     );
 };
 
@@ -56,7 +56,7 @@ const Requirement = ({
             p={2}
         >
             <HStack>
-                <Text color={common(isPassValid.length)}>Len</Text>
+                <Text color={common(isPassValid.length)}>Lenght of password</Text>
             </HStack>
             <HStack>
                 <Text color={common(isPassValid.uppercase)}>
@@ -71,18 +71,14 @@ const Requirement = ({
             <HStack>
                 <Text color={common(isPassValid.number)}>Number</Text>
             </HStack>
-            <HStack>
-                <Text color={common(isPassValid.special)}>
-                    Special
-                </Text>
-            </HStack>
         </Stack>
     );
 };
 const Step2 = ({
-    bindpassword,
-    binduserName,
+    bindPassword,
+    bindUsername,
     bindRePassword,
+    bindEmail,
     isValid,
 }: Step2) => {
     const { isOpen, onClose, onOpen } = useDisclosure();
@@ -91,19 +87,25 @@ const Step2 = ({
         uppercase: false,
         lowercase: false,
         number: false,
-        special: false,
     });
     return (
         <>
+            <FormControl isInvalid={isValid.email}>
+                <FormLabel>Email</FormLabel>
+                <Input type='email' {...bindEmail} />
+                <FormErrorMessage>
+                    Имайл хоосон зай агуулж бологүй
+                </FormErrorMessage>
+            </FormControl>
             <FormControl isInvalid={isValid.username}>
-                <FormLabel>username</FormLabel>
-                <Input type="username" {...binduserName} />
+                <FormLabel>Username</FormLabel>
+                <Input type="username" {...bindUsername} />
                 <FormErrorMessage>
                     Нэвтрэх нэр хоосон зай агуулж бологүй
                 </FormErrorMessage>
             </FormControl>
             <FormControl
-                isInvalid={!IsDisabled(isPassValid) && bindpassword.value !== ""}
+                isInvalid={!IsDisabled(isPassValid) && bindPassword.value !== ""}
             >
                 <FormLabel>Password</FormLabel>
                 <Input
@@ -111,10 +113,10 @@ const Step2 = ({
                     autoComplete="new-password"
                     onFocusCapture={onOpen}
                     onBlurCapture={onClose}
-                    value={bindpassword.value}
+                    value={bindPassword.value}
                     onChange={(e) => {
                         setPassValid(validatePassword(e.target.value));
-                        bindpassword.onChange(e);
+                        bindPassword.onChange(e);
                     }}
                 />
                 <FormErrorMessage>Нууц үг шаардлага хангахгүй байна.</FormErrorMessage>
@@ -124,7 +126,9 @@ const Step2 = ({
             </Collapse>
             <FormControl isInvalid={isValid.password}>
                 <FormLabel>Repeat Password</FormLabel>
-                <Input type="password" {...bindRePassword} />
+                <Input 
+                    type="password" 
+                    {...bindRePassword} />
                 <FormErrorMessage>
                     Давтан оруулсан нууц үг таарахгүй байна.
                 </FormErrorMessage>
@@ -133,13 +137,22 @@ const Step2 = ({
     );
 };
 
+export const passdoesntmatch = (passwordRepeat: string) => {
+    const rePassObj: Req = {
+        length: false,
+        uppercase: true,
+        lowercase: true,
+        number: true
+    }
+    if (passwordRepeat.length > 7) rePassObj.length = true;
+    return rePassObj
+}
 export const validatePassword = (password: string) => {
     const obj: Req = {
         length: false,
         uppercase: false,
         lowercase: false,
         number: false,
-        special: false,
     };
     if (password.length > 7) obj.length = true;
     if (/[A-Z]/g.test(password)) obj.uppercase = true;

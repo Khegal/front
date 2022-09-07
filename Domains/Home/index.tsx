@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { UseAuthContext } from "../../Context/AuthModalContext";
 import { ReactChild } from "react";
 import { Flex } from "@chakra-ui/react";
+import { useColor } from ".../../../Context/ColorContext";
 
 const noFooter = ["/nfts"];
 

@@ -14,10 +14,10 @@ import {
 } from "@chakra-ui/react";
 import { Bind } from "../../utils/dto/index.dto";
 import { Dispatch, SetStateAction, useState } from "react";
-import { useColor } from ".../../../Context/ColorContext";
+import { useColor } from "../../Context/ColorContext";
 
 interface ForgotStep2 {
-    bindpassword: Bind;
+    bindPassword: Bind;
     bindRePassword: Bind;
     setotp: Dispatch<SetStateAction<string>>;
     isValid: {
@@ -30,7 +30,6 @@ type Req = {
     uppercase: boolean;
     lowercase: boolean;
     number: boolean;
-    special: boolean;
 };
 
 export const IsDisabled = (isPassValid: Req) => {
@@ -38,12 +37,11 @@ export const IsDisabled = (isPassValid: Req) => {
         isPassValid.length &&
         isPassValid.uppercase &&
         isPassValid.lowercase &&
-        isPassValid.number &&
-        isPassValid.special
+        isPassValid.number 
     );
 };
 const ForgotStep2 = ({
-    bindpassword,
+    bindPassword,
     bindRePassword,
     isValid,
     setotp,
@@ -54,7 +52,6 @@ const ForgotStep2 = ({
         uppercase: false,
         lowercase: false,
         number: false,
-        special: false,
     });
     return (
         <>
@@ -71,17 +68,17 @@ const ForgotStep2 = ({
             </HStack>
 
             <FormControl
-                isInvalid={!IsDisabled(isPassValid) && bindpassword.value !== ""}
+                isInvalid={!IsDisabled(isPassValid) && bindPassword.value !== ""}
             >
                 <FormLabel>Password</FormLabel>
                 <Input
                     type="password"
                     onFocusCapture={onOpen}
                     onBlurCapture={onClose}
-                    value={bindpassword.value}
+                    value={bindPassword.value}
                     onChange={(e) => {
                     setPassValid(validatePassword(e.target.value));
-                    bindpassword.onChange(e);
+                    bindPassword.onChange(e);
                     }}
                 />
                 <FormErrorMessage>Нууц үг шаардлага хангахгүй байна.</FormErrorMessage>
@@ -127,12 +124,7 @@ const Requirement = ({
                 </Text>
             </HStack>
             <HStack>
-                <Text color={common(isPassValid.number)}>Number</Text>
-            </HStack>
-            <HStack>
-                <Text color={common(isPassValid.special)}>
-                    Special
-                </Text>
+                <Text color={common(isPassValid.number)}>Numb   er</Text>
             </HStack>
         </Stack>
     );
@@ -142,8 +134,7 @@ export const validatePassword = (password: string) => {
         length: false,
         uppercase: false,
         lowercase: false,
-        number: false,
-        special: false,
+        number: false
     };
     if (password.length > 7) obj.length = true;
     if (/[A-Z]/g.test(password)) obj.uppercase = true;

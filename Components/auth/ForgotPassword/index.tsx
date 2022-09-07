@@ -13,6 +13,7 @@ import ForgotStep2, {
     validatePassword,
 } from "../../SubComponents/ForgotStep2";
 import ForgotStep1 from "../../SubComponents/ForgotStep1";
+import { useColor } from ".../../../Context/ColorContext";
 
 function ForgotPassword({
     ChangeHandler,
@@ -20,10 +21,10 @@ function ForgotPassword({
     _username,
 }: BodyInterface) {
     const [code, setCode] = useState("");
-    const { value: credential, setValue: setCredential } = UseInput();
+    const { value: username, setValue: setusername } = UseInput();
     const { value: otp, setValue: setotp } = UseInput();
-    const { value: password, bind: bindpassword } = UseInput();
-    const { value: RePassword, bind: bindRePassword } = UseInput();
+    const { value: password, bind: bindPassword } = UseInput();
+    const { value: repassword, bind: bindRePassword } = UseInput();
     const [{ isLoading, data }, fetchOtp] = UseApi({
         service: ForgotPasswordOtp,
     });
@@ -33,10 +34,10 @@ function ForgotPassword({
     const [step, setStep] = useState<1 | 2>(fromLocal ? 2 : 1);
     const StepHandler = (e: FormEvent) => {
         e.preventDefault();
-        if (step === 1) fetchOtp({ credential });
+        if (step === 1) fetchOtp({ username });
         else if (passHandler())
             fetch({
-                credential,
+                username,
                 password,
                 code,
                 otp,
@@ -44,7 +45,7 @@ function ForgotPassword({
     };
 useEffect(() => {
         if (data) {
-            // setStep(2);
+            setStep(2);
             // setCode(data.code);
         }
     }, [data]);
@@ -66,16 +67,15 @@ useEffect(() => {
     });
 
     const IsDisabled = () => {
-        if (step === 1) return credential === "";
+        if (step === 1) return username === "";
         else
             return (
                 password === "" 
-                RePassword === ""
             )
     };
 
     const passHandler = () => {
-        if (RePassword === password) {
+        if (repassword === password) {
             setValid((p) => {
                 return { ...p, password: false };
             });
@@ -88,7 +88,7 @@ useEffect(() => {
         }
     };
     const Step2Props = {
-        bindpassword,
+        bindPassword,
         bindRePassword,
         isValid,
         setotp,
@@ -96,31 +96,28 @@ useEffect(() => {
     return (
         <Stack as="form" onSubmit={StepHandler}>
             {step === 1 ? (
-                <ForgotStep1 setValue={setCredential} />
+                <ForgotStep1 setValue={setusername} />
             ) : (
                 <ForgotStep2 {...Step2Props} />
             )}
             <Button
                 type="submit"
-                isLoading={isLoading }
+                isLoading={isLoading || SignUpIsloading}
                 isDisabled={IsDisabled()}
             >
-          {step === 1
-                    ? continue
-                    : fromLocal
-                    ? changePass
-                    : resetPassword{"}"}
+                Submit
             </Button>
             {!fromLocal && <Divider />}
             {!fromLocal && (
                 <Button
                     isDisabled={isLoading || SignUpIsloading}
                     variant="ghost"
-                    onClick={() => ChangeHandler("SignIn")}
+                    onClick={() => ChangeHandler("SignUp")}
                 >
                     Log In
                 </Button>
             )}
+    
         </Stack>
     );
 }

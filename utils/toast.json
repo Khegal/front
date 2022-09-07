@@ -31,7 +31,7 @@
     },
     "signup_success": {
       "title": "Congratulations",
-      "description": "You successfully signed up. Please verify",
+      "description": "You successfully signed up. Please Verify",
       "status": "success"
     },
     "reset_password": {

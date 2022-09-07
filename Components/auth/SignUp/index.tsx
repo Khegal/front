@@ -16,21 +16,27 @@ import { SignUp as _SignUp } from "../../../Services/lib/Auth";
 import Step2, {
     IsDisabled as _IsDisabled,
     validatePassword,
+    passdoesntmatch,
 } from "../../SubComponents/SignUpStep2";
+import { Bind } from "../../../utils/dto/index.dto";
 import Step1 from "../../SubComponents/SignUpStep1";
 import { Toaster } from "../../../Services/assets/Toaster";
+import { useColor } from ".../../../Context/ColorContext";
 
 function SignUp({  ChangeHandler, setCred }: BodyInterface) {
-    const { value: phoneNumber, setValue: setPhoneNumber } = UseInput();
-    const { value: username, bind: bindusername } = UseInput();
-    const { value: password, bind: bindpassword } = UseInput();
-    const { value: passwordRepeat, bind: bindpasswordRepeat } = UseInput();
+    const { value: phoneNum, setValue: setPhoneNum } = UseInput();
+    const { value: username, bind: bindUsername } = UseInput();
+    const { value: password, bind: bindPassword } = UseInput();
+    const { value: passwordRepeat, bind: bindRePassword } = UseInput();
     const { value: dial, setValue: setDial } = UseInput();
+    const { value : email, bind: bindEmail } = UseInput();
     const [isAgreed, setAgreed] = useState(false);
     const [isAgreedValid, setAgreedValid] = useState(false);
     const [isValid, setValid] = useState({
         password: false,
         username: false,
+        email: false,
+        passwordRepeat: false,
     });
     const [{ isLoading: SignUpIsloading, data }, fetch] = UseApi({
         service: _SignUp,
@@ -61,14 +67,14 @@ function SignUp({  ChangeHandler, setCred }: BodyInterface) {
     };
     useEffect(() => {
         if (data) {
-        //     Toaster({
-        //         type: "signup_success",
-        //     });
-        //     setCred({
-        //         code: data.code,
-        //         credential: data.credential,
-        //     });
-        //     ChangeHandler("verify");
+            Toaster({
+                type: "signup_success",
+            });
+            // setCred({
+            //     code: data.code,
+            //     credential: data.credential,
+            // });
+            ChangeHandler("Verify");
         }
     }, [data]);
 
@@ -90,33 +96,36 @@ function SignUp({  ChangeHandler, setCred }: BodyInterface) {
         e.preventDefault();
         if (passHandler() && usernameHandler() && AgreeHandler())
             fetch({
-                email: phoneNumber,
+                phoneNum,
                 username,
                 password,
+                passwordRepeat,
                 // countryCode: +${dial},
             });
     };
 
     const isDisabled = () => {
+
         return (
-            phoneNumber === "" 
-            password === "" 
-            passwordRepeat === "" 
-            username === "" 
-            !_IsDisabled(validatePassword(password))
+            phoneNum === "" ||
+            passwordRepeat === "" ||
+            !_IsDisabled(validatePassword(password)) ||
+            !_IsDisabled(passdoesntmatch(passwordRepeat))
         );
     };
     const Step2Props = {
-        password,
-        bindusername,
-        bindpasswordRepeat,
+        phoneNum,
+        bindPassword,
+        bindUsername,
+        bindRePassword,
+        bindEmail,
         isValid,
     };
 
 return (
         <form autoComplete="off" onSubmit={StepHandler}>
             <Stack>
-                <Step1 setDial={setDial} setValue={setPhoneNumber} />
+                <Step1 setDial={setDial} setValue={setPhoneNum} />
                 <Step2 {...Step2Props} />
                 <FormControl maxW="90%" isInvalid={isAgreedValid}>
                     <Checkbox
@@ -134,8 +143,9 @@ return (
                 </FormControl>
                 <Button
                     isLoading={SignUpIsloading}
-                    isDisabled={IsDisabled()}
+                    isDisabled={isDisabled()}
                     type="submit"
+                    onClick={() => ChangeHandler("Verify")}
                 >
                     Sign Up
                 </Button>
@@ -150,5 +160,5 @@ return (
             </Stack>
         </form>
     );
-
+}
 export default SignUp;

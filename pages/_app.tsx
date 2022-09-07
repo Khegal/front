@@ -5,13 +5,16 @@ import { ChakraProvider } from "@chakra-ui/react";
 import Theme from "../Theme";
 import { UserProvider } from "../Context/UserContext";
 import { AuthModalProvider } from "../Context/AuthModalContext";
+import { ColorProvider } from "../Context/ColorContext";
 function MyApp(AppProps: AppProps) {
 	return (
 		<ChakraProvider theme={Theme}>
 			<UserProvider>
-				<AuthModalProvider>
-					<Layout {...AppProps}/>
-				</AuthModalProvider>
+				<ColorProvider>
+					<AuthModalProvider>
+						<Layout {...AppProps}/>
+					</AuthModalProvider>
+				</ColorProvider>
 			</UserProvider>
 		</ChakraProvider>
 	);

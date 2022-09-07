@@ -12,6 +12,7 @@ import ForgotPassword from "./ForgotPassword";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp"
 import VerifyUser from "./VerifyUser"
+import { useColor } from ".../../../Context/ColorContext";
 
 interface Auth {
     isOpen: boolean;
@@ -23,7 +24,7 @@ export type Cred = {
     username: string;
 };
 
-type Which = "SignIn" | "SignUp" | "ForgotPassword" | "verify";
+type Which = "SignIn" | "SignUp" | "ForgotPassword" | "Verify";
 
 export interface BodyInterface {
     ChangeHandler: (selected: Which) => void;
@@ -47,8 +48,11 @@ const AuthBody = (
             return <SignUp {...props} />;
         case "ForgotPassword":
             return <ForgotPassword {...props} />;
-        case "verify":
-            return <VerifyUser />;
+        case "Verify":
+            return <VerifyUser cred={{
+                code: "",
+                username: ""
+            }} />;
     }
 };
 
@@ -81,7 +85,7 @@ function Auth({ isOpen, onClose }: Auth) {
     }, [isOpen]);
 	console.log(isOpen)
 	return (
-        <Modal isOpen={isOpen} size="xs" onClose={onClose}>
+        <Modal closeOnOverlayClick={false} isOpen={isOpen} size="xs" onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>

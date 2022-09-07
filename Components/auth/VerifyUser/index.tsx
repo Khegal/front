@@ -32,7 +32,7 @@ import { Verify } from "../../../Services/lib/Auth";
   
     useEffect(() => {
       if (data) {
-        // Toaster({ type: "login_success" });
+        Toaster({ type: "login_success" });
         // dispatcher({
         //   type: "login",
         //   state: {

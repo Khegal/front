@@ -15,10 +15,11 @@ import { UseInput } from "../../../Hooks/UseInput";
 import { FormEvent, useEffect } from "react";
 import { Toaster } from "../../../Services/assets/Toaster";
 import { useUser } from "../../../Context/UserContext";
+import { useColor } from ".../../../Context/ColorContext";
 
 function SignIn({ ChangeHandler,  setCred }: BodyInterface) {
-    const { bind: userNameBind, value: username } = UseInput();
-    const { bind: passwordBind, value: password } = UseInput();
+    const { bind: bindUsername, value: username } = UseInput();
+    const { bind: bindPassword, value: password } = UseInput();
     // const { dispatcher } = useUser();
     const [{ data, isLoading }, fetch] = UseApi({
         service: _SignIn,
@@ -30,7 +31,7 @@ function SignIn({ ChangeHandler,  setCred }: BodyInterface) {
 //                 //     code: data.code,
 //                 //     username: data.username,
 //                 // });
-//                 ChangeHandler("verify");
+//                 ChangeHandler("Verify");
 //             } else {
 //                 const { access_token, refresh_token } = data;
 //                 Toaster({ type: "login_success" });
@@ -57,8 +58,8 @@ function SignIn({ ChangeHandler,  setCred }: BodyInterface) {
     return (
         <Stack as="form" onSubmit={Handler}>
             <FormControl>
-                <FormLabel>Username</FormLabel>
-                <Input {...userNameBind} type="username" />
+                <FormLabel>username</FormLabel>
+                <Input {...bindUsername} type="username" />
             </FormControl>
             <FormControl>
                 <HStack alignItems="flex-start" justifyContent="space-between">
@@ -71,7 +72,7 @@ function SignIn({ ChangeHandler,  setCred }: BodyInterface) {
                     Forgot Password
                     </Text>
                 </HStack>
-                <Input {...passwordBind} type="password" />
+                <Input {...bindPassword} type="password" />
             </FormControl>
             <Button isDisabled={IsDisabled()} type="submit" isLoading={isLoading}>
             Login
